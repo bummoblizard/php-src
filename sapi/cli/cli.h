@@ -36,4 +36,6 @@ typedef struct  {
 
 extern PHP_CLI_API cli_shell_callbacks_t *php_cli_get_shell_callbacks(void);
 
+extern PHP_CLI_API int main(int argc, char *argv[]);
+
 #endif /* CLI_H */

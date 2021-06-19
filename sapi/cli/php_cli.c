@@ -81,6 +81,9 @@
 #include "php_cli_process_title.h"
 #include "php_cli_process_title_arginfo.h"
 
+#include "ios_error.h"
+#define printf(args...) fprintf(thread_stdout, args)
+
 #ifndef PHP_WIN32
 # define php_select(m, r, w, e, t)	select(m, r, w, e, t)
 #else
@@ -1125,7 +1128,7 @@ err:
 #ifdef PHP_CLI_WIN32_NO_CONSOLE
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 #else
-int main(int argc, char *argv[])
+PHP_CLI_API int main(int argc, char *argv[])
 #endif
 {
 #if defined(PHP_WIN32)
