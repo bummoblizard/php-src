@@ -361,7 +361,7 @@ static void sapi_cli_register_variables(zval *track_vars_array) /* {{{ */
 
 static void sapi_cli_log_message(const char *message, int syslog_type_int) /* {{{ */
 {
-	fprintf(stderr, "%s\n", message);
+	fprintf(thread_stderr, "%s\n", message);
 #ifdef PHP_WIN32
 	fflush(stderr);
 #endif
@@ -549,11 +549,11 @@ static void cli_register_file_handles(void) /* {{{ */
 		return;
 	}
 
-#if PHP_DEBUG
+// #if PHP_DEBUG
 	/* do not close stdout and stderr */
 	s_out->flags |= PHP_STREAM_FLAG_NO_CLOSE;
 	s_err->flags |= PHP_STREAM_FLAG_NO_CLOSE;
-#endif
+// #endif
 
 	s_in_process = s_in;
 

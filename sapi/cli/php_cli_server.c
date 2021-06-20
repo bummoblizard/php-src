@@ -101,6 +101,9 @@
 #define OUTPUT_IS_TTY 1
 #define OUTPUT_NOT_TTY 0
 
+#include "ios_error.h"
+#define printf(args...) fprintf(thread_stdout, args)
+
 #if HAVE_FORK
 # include <sys/wait.h>
 static pid_t	 php_cli_server_master;
@@ -721,12 +724,12 @@ static void sapi_cli_server_log_write(int type, const char *msg) /* {{{ */
 	}
 #ifdef HAVE_FORK
 	if (php_cli_server_workers_max > 1) {
-		fprintf(stderr, "[%ld] [%s] %s\n", (long) getpid(), buf, msg);
+		fprintf(thread_stderr, "[%ld] [%s] %s\n", (long) getpid(), buf, msg);
 	} else {
-		fprintf(stderr, "[%s] %s\n", buf, msg);
+		fprintf(thread_stderr, "[%s] %s\n", buf, msg);
 	}
 #else
-	fprintf(stderr, "[%s] %s\n", buf, msg);
+	fprintf(thread_stderr, "[%s] %s\n", buf, msg);
 #endif
 } /* }}} */
 
@@ -2391,10 +2394,10 @@ static void php_cli_server_startup_workers() {
 			}
 		}
 	} else {
-		fprintf(stderr, "number of workers must be larger than 1\n");
+		fprintf(thread_stderr, "number of workers must be larger than 1\n");
 	}
 #else
-	fprintf(stderr, "forking is not supported on this platform\n");
+	fprintf(thread_stderr, "forking is not supported on this platform\n");
 #endif
 }
 
@@ -2411,7 +2414,7 @@ static int php_cli_server_ctor(php_cli_server *server, const char *addr, const c
 
 	host = php_cli_server_parse_addr(addr, &port);
 	if (!host) {
-		fprintf(stderr, "Invalid address: %s\n", addr);
+		fprintf(thread_stderr, "Invalid address: %s\n", addr);
 		retval = FAILURE;
 		goto out;
 	}
@@ -2680,7 +2683,7 @@ int do_cli_server(int argc, char **argv) /* {{{ */
 #else
 				k = strlen(php_optarg);
 				if (k + 1 > MAXPATHLEN) {
-					fprintf(stderr, "Document root path is too long.\n");
+					fprintf(thread_stderr, "Document root path is too long.\n");
 					return 1;
 				}
 				memmove(document_root_tmp, php_optarg, k + 1);
@@ -2705,11 +2708,11 @@ int do_cli_server(int argc, char **argv) /* {{{ */
 		zend_stat_t sb;
 
 		if (php_sys_stat(document_root, &sb)) {
-			fprintf(stderr, "Directory %s does not exist.\n", document_root);
+			fprintf(thread_stderr, "Directory %s does not exist.\n", document_root);
 			return 1;
 		}
 		if (!S_ISDIR(sb.st_mode)) {
-			fprintf(stderr, "%s is not a directory.\n", document_root);
+			fprintf(thread_stderr, "%s is not a directory.\n", document_root);
 			return 1;
 		}
 		if (VCWD_REALPATH(document_root, document_root_buf)) {
