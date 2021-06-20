@@ -30,8 +30,10 @@ make
 
 # Generate frameworks
 cp sapi/cli/php iOS/php
-cd iOS/out
-mkdir php.framework
-mv php php.framework/php
-cp Info.plist php.framework/Info.plist
+cd iOS
+mkdir out
+mkdir out/php.framework
+mv php out/php.framework/php
+cp Info.plist out/php.framework/Info.plist
+cd out
 xcodebuild -create-xcframework -framework php.framework -output php.xcframework
