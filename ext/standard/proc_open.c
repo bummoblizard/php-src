@@ -1272,7 +1272,9 @@ PHP_FUNCTION(proc_open)
 	}
 
 	if (cwd) {
-		r = posix_spawn_file_actions_addchdir_np(&factions, cwd);
+		// Unavailable on iOS
+		// r = posix_spawn_file_actions_addchdir_np(&factions, cwd);
+		r = -1;
 		if (r != 0) {
 			php_error_docref(NULL, E_WARNING, "posix_spawn_file_actions_addchdir_np() failed: %s", strerror(r));
 		}
