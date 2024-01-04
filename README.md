@@ -18,6 +18,23 @@ blog to the most popular websites in the world. PHP is distributed under the
 [![Build status](https://travis-ci.com/php/php-src.svg?branch=master)](https://travis-ci.com/github/php/php-src)
 [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/php.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:php)
 
+---
+
+## About this fork
+This fork contains the changes needed in order for PHP to work with [ios_system](https://github.com/holzschu/ios_system), a drop-in replacement for system() in iOS programs.
+
+## Building for iOS
+On macOS, cross-compile for iOS:
+```sh
+sh ./downloadAndCompile.sh
+```
+Or if you've already downloaded `ios_system.xcframework` and `ios_error.h`:
+```
+sh ./build.sh
+```
+
+---
+
 ## Documentation
 
 The PHP manual is available at [php.net/docs](https://php.net/docs).

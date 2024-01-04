@@ -82,6 +82,9 @@
 #include "php_cli_process_title.h"
 #include "php_cli_process_title_arginfo.h"
 
+#include "ios_error.h"
+#define printf(args...) fprintf(thread_stdout, args)
+
 #ifndef PHP_WIN32
 # define php_select(m, r, w, e, t)	select(m, r, w, e, t)
 #else
@@ -362,7 +365,7 @@ static void sapi_cli_register_variables(zval *track_vars_array) /* {{{ */
 
 static void sapi_cli_log_message(const char *message, int syslog_type_int) /* {{{ */
 {
-	fprintf(stderr, "%s\n", message);
+	fprintf(thread_stderr, "%s\n", message);
 #ifdef PHP_WIN32
 	fflush(stderr);
 #endif
@@ -550,6 +553,12 @@ static void cli_register_file_handles(void)
 		if (s_err) php_stream_close(s_err);
 		return;
 	}
+
+// #if PHP_DEBUG
+	/* do not close stdout and stderr */
+	s_out->flags |= PHP_STREAM_FLAG_NO_CLOSE;
+	s_err->flags |= PHP_STREAM_FLAG_NO_CLOSE;
+// #endif
 
 	s_in_process = s_in;
 
@@ -1163,7 +1172,7 @@ err:
 #ifdef PHP_CLI_WIN32_NO_CONSOLE
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 #else
-int main(int argc, char *argv[])
+PHP_CLI_API int main(int argc, char *argv[])
 #endif
 {
 #if defined(PHP_WIN32)

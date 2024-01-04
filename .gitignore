@@ -297,3 +297,9 @@ tmp-php.ini
 !/ext/fileinfo/magicdata.patch
 !/ext/pcre/pcre2lib/config.h
 !/win32/build/Makefile
+
+*.dep
+.DS_Store
+ios_error.h
+ios_system.xcframework.zip
+ios_system.xcframework/

@@ -31,6 +31,9 @@
 #include "zend_stack.h"
 #include "php_output.h"
 
+#include "ios_error.h"
+#define printf(args...) fprintf(thread_stdout, args)
+
 PHPAPI ZEND_DECLARE_MODULE_GLOBALS(output)
 
 const char php_output_default_handler_name[sizeof("default output handler")] = "default output handler";
@@ -115,8 +118,8 @@ static void php_output_header(void)
 				zend_string_addref(OG(output_start_filename));
 			}
 #if PHP_OUTPUT_DEBUG
-			fprintf(stderr, "!!! output started at: %s (%d)\n",
-				ZSTR_VAL(OG(output_start_filename)), OG(output_start_lineno));
+			fprintf(thread_stderr, "!!! output started at: %s (%d)\n",
+				ZSTR_VAL(OG(output_start_filename_str)), OG(output_start_lineno));
 #endif
 		}
 		if (!php_header()) {
@@ -901,7 +904,7 @@ static inline php_output_handler_status_t php_output_handler_op(php_output_handl
 	int original_op = context->op;
 
 #if PHP_OUTPUT_DEBUG
-	fprintf(stderr, ">>> op(%d, "
+	fprintf(thread_stderr, ">>> op(%d, "
 					"handler=%p, "
 					"name=%s, "
 					"flags=%d, "
@@ -1066,7 +1069,7 @@ static inline void php_output_op(int op, const char *str, size_t len)
 
 		if (!(OG(flags) & PHP_OUTPUT_DISABLED)) {
 #if PHP_OUTPUT_DEBUG
-			fprintf(stderr, "::: sapi_write('%s', %zu)\n", context.out.data, context.out.used);
+			fprintf(thread_stderr, "::: sapi_write('%s', %zu)\n", context.out.data, context.out.used);
 #endif
 			sapi_module.ub_write(context.out.data, context.out.used);
 
