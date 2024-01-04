@@ -24,7 +24,7 @@ LDFLAGS="$FLAGS -lresolv -dynamiclib -framework ios_system -F$PWD/ios_system.xcf
 
 export CFLAGS CXXFLAGS LDFLAGS
 
-CONFIGURE_FLAGS="--host=$HOST --enable-embed=shared --enable-cli --disable-phpdbg --disable-phar --enable-static --without-pear --disable-opcache --disable-opcache-jit --without-iconv --disable-cgi --disable-shared --enable-mysqlnd --with-pdo-mysql --with-mysqli --without-pcre-jit"
+CONFIGURE_FLAGS="--host=$HOST --enable-embed=shared --enable-cli --disable-phpdbg --disable-phar --enable-static --without-pear --disable-opcache --disable-opcache-jit --without-iconv --disable-cgi --disable-shared --enable-mysqlnd --with-pdo-mysql --with-mysqli --without-pcre-jit --with-zlib"
 ./configure $CONFIGURE_FLAGS
 make
 
